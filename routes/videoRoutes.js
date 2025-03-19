@@ -16,7 +16,7 @@ const videoRouter = express.Router();
 
 //configuring s3 bucket
 const s3 = new S3Client({
-  region: "eu-north-1", //process.env.AWS_S3_REGION,
+  region: "us-east-1", //process.env.AWS_S3_REGION,
   credentials: {
     accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY
@@ -26,7 +26,7 @@ const s3 = new S3Client({
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "cineflow-videos", //process.env.AWS_S3_BUCKET,
+    bucket: "cineflow-videofiles", //process.env.AWS_S3_BUCKET,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
       cb(null, `videos/${Date.now()}-${path.basename(file.originalname)}`);
