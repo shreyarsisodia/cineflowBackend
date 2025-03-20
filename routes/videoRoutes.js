@@ -9,24 +9,26 @@ import path from "path";
 import Video from "../models/video.js";
 import ffmpegPath from "@ffmpeg-installer/ffmpeg";
 import { S3Client } from "@aws-sdk/client-s3";
+import dotenv from "dotenv";
 
 ffmpeg.setFfmpegPath(ffmpegPath.path);
+dotenv.config();
 
 const videoRouter = express.Router();
 
 //configuring s3 bucket
 const s3 = new S3Client({
-  region: "us-east-1", //process.env.AWS_S3_REGION,
+  region: "eu-north-1", //process.env.AWS_S3_REGION,
   credentials: {
     accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY
+    secretAccessKey:process.env.AWS_S3_SECRET_ACCESS_KEY
   }
 });
 
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "cineflow-videofiles", //process.env.AWS_S3_BUCKET,
+    bucket: "cineflow-videos", //process.env.AWS_S3_BUCKET,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
       cb(null, `videos/${Date.now()}-${path.basename(file.originalname)}`);
